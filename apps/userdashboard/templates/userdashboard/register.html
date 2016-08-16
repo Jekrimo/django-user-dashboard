@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Register</title>
+    <link rel= 'stylesheet' type= 'text/css' href= "{% static 'userdashboard/index.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id= "container">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">Test App</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li id= "right" class="active"><a href="/signin">Sign in</a></li>
+          </ul>
+        </div>
+        </nav>
+      <h1>Register</h1>
+      <form class="form-horizontal" action="/create/user" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="email">Email Address:</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="email" name= "email" placeholder="Enter email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="pwd">First Name:</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="first_name" name= "first_name" placeholder="Enter first_name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="last_name">Last Name:</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="last_name" name= "last_name" placeholder="Enter last_name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="pwd">Password:</label>
+          <div class="col-sm-3">
+            <input type="password" class="form-control" id="Des" name= "password" placeholder="Enter Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="passconf">Password Confirmation:</label>
+          <div class="col-sm-3">
+            <input type="password" class="form-control" id=" " name= "passconf" placeholder="Enter Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-4">
+            <button type="submit" class="btn btn-default" >Sign in</button>
+          </div>
+        </div>
+      </form>
+      <a href= "/signin"><h4>Already have an account? Login...</h4></a>
+    </div>
+  </body>
+</html>
