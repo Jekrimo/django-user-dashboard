@@ -1,0 +1,11 @@
+#container{
+  width: 1000px;
+  padding: 25px;
+}
+
+#right{
+  margin-left: 490px;
+}
+#container input{
+  margin-left: 25px;
+}

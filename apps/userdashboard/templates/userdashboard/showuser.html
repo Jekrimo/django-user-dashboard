@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <link rel= 'stylesheet' type= 'text/css' href= "{% static 'userdashboard/shows.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style media="screen">
+      #return{
+        margin-left: 750px;
+        margin-top: -50px;
+      }
+      #btn{
+        background-color: lightblue;
+        color: white;
+      }
+      #info_ans{
+        margin-left: 150px;
+        margin-top: -115px;
+      }
+      #lines{
+        width: 150px;
+      }
+    </style>
+  </head>
+   <body>
+     <div id= "container">
+       <nav class="navbar navbar-default">
+         <div class="container-fluid">
+           <div class="navbar-header">
+             <a class="navbar-brand" href="/">Test App</a>
+           </div>
+           <ul class="nav navbar-nav">
+             <li class="active"><a href="/">Home</a></li>
+              <li class="active"><a href="/dashboard/user">Dashboard</a></li>
+                <li class="active"><a href="/users/show/{{request.session.user}}">Profile</a></li>
+             <li id= "right" class="active"><a href="/clear">Log off</a></li>
+           </ul>
+         </div>
+         </nav>
+       <h1>{{user.first_name}} {{user.last_name}}</h1>
+       <div class="info">
+        <h4>Registered at:</h4>
+          <h4>User Id:</h4>
+            <h4>Email Address:</h4>
+          <h4>Description:</h4>
+        </div>
+        <div id="info_ans">
+         <h4>{{user.created_at}}</h4>
+           <h4>{{user.id}}</h4>
+             <h4>{{user.email}}</h4>
+           <h4>{{user.description}}</h4>
+         </div>
+      </div>
+     </div>
+   </body>
+ </html>

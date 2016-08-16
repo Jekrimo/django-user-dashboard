@@ -10,9 +10,13 @@ class Createuser(models.Manager):
         errors = []
         if PASSWORD_REGEX.match(create_password):
             if EMAIL_REGEX.match(email_address):
-                hashed_pass = bcrypt.hashpw(create_password.encode(), bcrypt.gensalt())
-                user = Users.objects.create(email = email_address, password = hashed_pass, first_name = first_name, last_name = last_name, user_level= level)
-                return (True, errors, user)
+                if not Users.objects.filter(email=email_address):
+                    hashed_pass = bcrypt.hashpw(create_password.encode(), bcrypt.gensalt())
+                    user = Users.objects.create(email = email_address, password = hashed_pass, first_name = first_name, last_name = last_name, user_level= level)
+                    return (True, errors, user)
+                else:
+                    errors.append('Sorry, that email already exsists. Please Login.')
+                    return(False,errors)
             else:
                 if len(email_address) < 6:
                     errors.append("Email address is too short!")
@@ -39,13 +43,24 @@ class Login(models.Manager):
             password = user.password.encode()
             loginpass = login_password.encode()
             if hashpw(loginpass, password) == password:
-                return (True, login_errors)
+                return (True, login_errors, user)
             else:
                 login_errors.append("Sorry, no password match")
                 return (False, login_errors)
         else:
             login_errors.append("Sorry, no email found. Please try again.")
             return (False, login_errors)
+
+class Updatepassword(models.Manager):
+    def userpassupdate(self, password, id):
+        passerrors = []
+        if PASSWORD_REGEX.match(password):
+            hashed_pass = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+            Users.objects.filter(id=id).update(password=hashed_pass)
+            return (True, passerrors)
+        else:
+            passerrors.append('Sorry, rules are not met for entered password.')
+            return (False, passerrors)
 
 
 class Users(models.Model):
@@ -60,4 +75,5 @@ class Users(models.Model):
 
     createuser = Createuser()
     login = Login()
+    updatepass = Updatepassword()
     objects = models.Manager()
