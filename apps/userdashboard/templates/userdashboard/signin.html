@@ -22,6 +22,9 @@
         </div>
         </nav>
           <h1>Sign in</h1>
+          {%for error in errors%}
+          <p>{{error}}</p>
+          {%endfor%}
           <form class="form-horizontal" action="/login/user" method="post" role="form">
             {% csrf_token %}
             <div class="form-group">

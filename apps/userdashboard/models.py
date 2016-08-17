@@ -16,7 +16,7 @@ class Createuser(models.Manager):
                     return (True, errors, user)
                 else:
                     errors.append('Sorry, that email already exsists. Please Login.')
-                    return(False,errors)
+                    return(False, errors)
             else:
                 if len(email_address) < 6:
                     errors.append("Email address is too short!")
@@ -38,7 +38,11 @@ class Login(models.Manager):
     def userlogin(self, login_email, login_password):
         from bcrypt import hashpw, gensalt
         login_errors = []
-        if Users.objects.get(email=login_email):
+        if Users.objects.filter(email=login_email).exists() == False:
+            login_errors.append("Sorry, no email found. Please try again.")
+            return (False, login_errors)
+
+        else:
             user = Users.objects.get(email=login_email)
             password = user.password.encode()
             loginpass = login_password.encode()
@@ -47,9 +51,6 @@ class Login(models.Manager):
             else:
                 login_errors.append("Sorry, no password match")
                 return (False, login_errors)
-        else:
-            login_errors.append("Sorry, no email found. Please try again.")
-            return (False, login_errors)
 
 class Updatepassword(models.Manager):
     def userpassupdate(self, password, id):

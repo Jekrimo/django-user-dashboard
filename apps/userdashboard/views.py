@@ -12,22 +12,21 @@ def signin(request):
 
 def login(request):
     if request.method == 'POST':
-            user = Users.login.userlogin(login_email=request.POST['email'],login_password=request.POST['password'])
-            print user[2]
-            if user[0] == True:
-                if user[2].user_level == 9:
-                    request.session['user'] = user[2].id
-                    request.session['admin'] = user[2].user_level
-                    return redirect('/dashboard/admin')
-                else:
-                    request.session['user'] = user[2].id
-                    request.session['admin'] = user[2].user_level
-                    return redirect('/dashboard/user')
+        user = Users.login.userlogin(login_email=request.POST['email'],login_password=request.POST['password'])
+        if user[0] == True:
+            if user[2].user_level == 9:
+                request.session['user'] = user[2].id
+                request.session['admin'] = user[2].user_level
+                return redirect('/dashboard/admin')
             else:
-                context = {
-                    'errors' : user[1]
-                }
-                return render(request, "userdashboard/signin.html", context)
+                request.session['user'] = user[2].id
+                request.session['admin'] = user[2].user_level
+                return redirect('/dashboard/user')
+        else:
+            context = {
+                'errors' : user[1]
+            }
+            return render(request, "userdashboard/signin.html", context)
     else:
         return redirect('/register')
 
