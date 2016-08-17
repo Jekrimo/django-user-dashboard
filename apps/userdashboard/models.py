@@ -77,3 +77,24 @@ class Users(models.Model):
     login = Login()
     updatepass = Updatepassword()
     objects = models.Manager()
+
+
+class Messages(models.Model):
+  message = models.TextField()
+  user = models.ForeignKey(Users)
+  first_name = models.CharField(max_length=30)
+  last_name = models.CharField(max_length=30)
+  m_use_id =  models.IntegerField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
+class Comments(models.Model):
+  comment = models.TextField()
+  user = models.ForeignKey(Users)
+  message = models.ForeignKey(Messages)
+  first = models.CharField(max_length=30)
+  last = models.CharField(max_length=30)
+  mid = models.IntegerField()
+  c_use_id =  models.IntegerField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)

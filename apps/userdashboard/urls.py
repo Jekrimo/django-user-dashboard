@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^users/edit/(?P<id>\d+)/update/pass$', views.updatepass),
     url(r'^users/new$', views.new),
     url(r'^create/new$', views.createnew),
+    url(r'^message/create/(?P<id>\d+)$', views.messages),
+    url(r'^comment/create/(?P<id>\d+)/(?P<mid>\d+)$', views.comments),
     ]

@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
 from . import models
 from models import Users
+from models import Messages
+from models import Comments
 
 def index(request):
     return render(request, "userdashboard/index.html")
@@ -52,22 +54,32 @@ def create(request):
         return redirect('/register')
 
 def show(request):
-    context= {
-        'Users' : Users.objects.all()
-    }
-    return render(request, "userdashboard/show.html", context)
+    if request.session['admin'] == 9:
+        return redirect('/dashboard/admin')
+    else:
+        context= {
+            'Users' : Users.objects.all()
+        }
+        return render(request, "userdashboard/show.html", context)
 
 def showadmin(request):
-    context= {
-        'Users' : Users.objects.all()
-    }
-    return render(request, "userdashboard/showadmin.html", context)
+    if request.session['admin'] == 9:
+        context= {
+            'Users' : Users.objects.all()
+        }
+        return render(request, "userdashboard/showadmin.html", context)
+    else:
+        return redirect('/dashboard/user')
 
 def showusers(request, id):
-        context = {
-            "user" : Users.objects.get(id=id)
-        }
-        return render(request, "userdashboard/showuser.html", context)
+    mid =Messages.objects.filter(user_id=id)
+    midid = mid
+    context = {
+        "user" : Users.objects.get(id=id),
+        "messages" : Messages.objects.filter(user_id=id).order_by('created_at').reverse(),
+        "comments" : Comments.objects.all().order_by('created_at').reverse()
+    }
+    return render(request, "userdashboard/showuser.html", context)
 
 def edit(request, id):
     context = {
@@ -123,6 +135,27 @@ def createnew(request):
                 return redirect('/signin')
         else:
             return redirect('/users/new')
+
+def messages(request, id):
+    if request.method == 'POST':
+        mid = request.session['user']
+        messageleaver = Users.objects.get(id=mid)
+        first = messageleaver.first_name
+        last = messageleaver.last_name
+        user = Users.objects.get(id=id)
+        Messages.objects.create(message=request.POST['message'], user=user, first_name=first, last_name=last, m_use_id=mid)
+    return redirect('/users/show/'+ id)
+
+def comments(request, id, mid):
+    if request.method == 'POST':
+        uid = request.session['user']
+        commentleaver = Users.objects.get(id=uid)
+        mess = Messages.objects.get(id=mid)
+        first = commentleaver.first_name
+        last = commentleaver.last_name
+        user = Users.objects.get(id=id)
+        Comments.objects.create(comment=request.POST['comment'],message=mess, user=user, first=first, last=last, c_use_id=uid, mid=mid)
+    return redirect('/users/show/'+ id)
 
 def delete(request, id):
     Users.objects.filter(id=id).delete()

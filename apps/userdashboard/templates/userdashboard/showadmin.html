@@ -27,6 +27,8 @@
           </div>
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
+              <li class="active"><a href="/dashboard/user">Dashboard</a></li>
+                <li class="active"><a href="/users/show/{{request.session.user}}">Profile</a></li>
             <li id= "right" class="active"><a href="/clear">Log off</a></li>
           </ul>
         </div>
@@ -50,7 +52,7 @@
             {% for user in Users %}
             <tr>
               <td>{{user.id}}</td>
-              <td>{{user.first_name}} {{user.last_name}}</td>
+              <td><a href= "/users/show/{{user.id}}">{{user.first_name}} {{user.last_name}}</a></td>
               <td>{{user.email}}</td>
               <td>{{user.created_at}}</td>
               <td>{{user.user_level}}</td>

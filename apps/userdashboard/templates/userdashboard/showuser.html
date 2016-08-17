@@ -23,6 +23,36 @@
       #lines{
         width: 150px;
       }
+      #message_space{
+        margin-top: 50px;
+      }
+      #message{
+        margin-right: 20px;
+        width: 600px;
+      }
+      #message_space h1{
+        margin-left: 30px;
+      }
+      #messages{
+        width: 400px;
+      }
+      .name{
+        display: inline-block;
+        margin-left: 10px;
+      }
+      .omess{
+        margin-left: 25px;
+        width: 400px;
+      }
+      #minfo{
+        margin-bottom: -20px;
+      }
+      .comment{
+        font-size: 1.4em;
+      }
+      #somecomments{
+        margin-left: 55px;
+      }
     </style>
   </head>
    <body>
@@ -53,7 +83,55 @@
              <h4>{{user.email}}</h4>
            <h4>{{user.description}}</h4>
          </div>
+         <div id= "message_space">
+        <h1>Leave a message for {{user.first_name}}</h1>
+        <form class="form-horizontal" action="/message/create/{{user.id}}" method="post" role="form">
+          {% csrf_token %}
+          <div class="form-group">
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="message" name= "message">
+              <input type= "hidden" name= "{{request.session.user}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-4">
+              <button type="submit" class="btn btn-default" >Post</button>
+            </div>
+          </div>
+        </form>
       </div>
-     </div>
+      <div id= "messages">
+        {% for message in messages %}
+        <div id= "minfo">
+          <h6 class= "name">{{message.first_name}} {{message.last_name}}</h6>
+          <h6 class= "name">{{message.created_at}}</h6>
+        </div>
+          <h3 class= "omess">{{message.message}}</h3>
+            <div id= "somecomments">
+              {%for comment in comments%}
+                {% if message.id == comment.mid %}
+                <h6 class= "name">{{comment.first}} {{comment.last}}</h6>
+                <h6 class= "name">{{comment.created_at}}</h6>
+                  <p class= "comment">{{comment.comment}}</p>
+                {% endif %}
+              {%endfor%}
+          </div>
+          <form class="form-horizontal" action="/comment/create/{{user.id}}/{{message.id}}" method="post" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="comment" name= "comment">
+                <input type= "hidden" name= "{{request.session.user}}">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-4">
+                <button type="submit" class="btn btn-default" >Comment</button>
+              </div>
+            </div>
+          </form>
+        {% endfor %}
+      </div>
+   </div>
    </body>
  </html>
