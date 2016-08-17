@@ -53,6 +53,12 @@
       #somecomments{
         margin-left: 55px;
       }
+      #editbtn{
+        margin-left: 300px;
+        margin-top: -150px;
+        background-color: lightgreen;
+        color: white;
+      }
     </style>
   </head>
    <body>
@@ -82,6 +88,13 @@
            <h4>{{user.id}}</h4>
              <h4>{{user.email}}</h4>
            <h4>{{user.description}}</h4>
+           {% if user.id == request.session.user %}
+             <div class="form-group">
+               <div class="col-sm-offset-3 col-sm-4">
+                <a href="/user/self/edit/{{user.id}}"><button id="editbtn" type="button" class="btn btn-default" >Edit your profile</button></a>
+               </div>
+             </div>
+           {%endif%}
          </div>
          <div id= "message_space">
         <h1>Leave a message for {{user.first_name}}</h1>

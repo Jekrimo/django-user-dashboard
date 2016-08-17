@@ -21,6 +21,7 @@ def login(request):
                     return redirect('/dashboard/admin')
                 else:
                     request.session['user'] = user[2].id
+                    request.session['admin'] = user[2].user_level
                     return redirect('/dashboard/user')
             else:
                 context = {
@@ -87,6 +88,12 @@ def edit(request, id):
     }
     return render(request, "userdashboard/edit.html", context)
 
+def selfedit(request, id):
+    context = {
+        "user" : Users.objects.get(id=id)
+    }
+    return render(request, "userdashboard/useredit.html", context)
+
 def update(request, id):
     if request.method == 'POST':
         l = request.POST['user_level']
@@ -95,6 +102,33 @@ def update(request, id):
         if request.session['admin'] == 9:
             Users.objects.filter(id=id).update(first_name=request.POST['first_name'],last_name=request.POST['last_name'],email=request.POST['email'],user_level=use_level)
             return redirect('/dashboard/admin')
+        else:
+            return redirect('/signin')
+
+def usersupdate(request, id):
+    if request.method == 'POST':
+        if int(request.session['user']) == int(id):
+            Users.objects.filter(id=id).update(first_name=request.POST['first_name'],last_name=request.POST['last_name'],email=request.POST['email'],description=request.POST['description'])
+            return redirect('/users/show/' + id)
+        else:
+            return redirect('/signin')
+
+def userupdatepass(request, id):
+    if request.method == 'POST':
+        print id
+        print request.session['user']
+        if int(request.session['user']) == int(id):
+            if request.POST['password'] == request.POST['passconf']:
+                updoot = Users.updatepass.userpassupdate(id=id, password=request.POST['password'])
+                if updoot[0] == True:
+                    return redirect('/dashboard/admin')
+                else:
+                    context= {
+                        'errors' : updoot[1]
+                    }
+                    return redirect('/user/self/edit/'+ id)
+            else:
+                return redirect('/user/self/edit/'+ id)
         else:
             return redirect('/signin')
 
@@ -109,9 +143,9 @@ def updatepass(request, id):
                     context= {
                         'errors' : updoot[1]
                     }
-                    return redirect('/users/edit/{id}')
+                    return redirect('/users/edit/'+ id)
             else:
-                return redirect('/users/edit/{id}')
+                return redirect('/users/edit/'+ id)
         else:
             return redirect('/signin')
 
